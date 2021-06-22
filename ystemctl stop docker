@@ -1,0 +1,21 @@
+[0;1;32m●[0m docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Tue 2021-06-22 07:58:59 AST; 24min ago
+TriggeredBy: [0;1;32m●[0m docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 14753 (dockerd)
+      Tasks: 12
+     Memory: 75.8M
+     CGroup: /system.slice/docker.service
+             └─14753 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+jun 22 07:58:59 gabrielroubiera dockerd[14753]: time="2021-06-22T07:58:59.067678643-04:00" level=warning msg="Your kernel does not support cgroup blkio weight"
+jun 22 07:58:59 gabrielroubiera dockerd[14753]: time="2021-06-22T07:58:59.067692553-04:00" level=warning msg="Your kernel does not support cgroup blkio weight_device"
+jun 22 07:58:59 gabrielroubiera dockerd[14753]: time="2021-06-22T07:58:59.068016127-04:00" level=info msg="Loading containers: start."
+jun 22 07:58:59 gabrielroubiera dockerd[14753]: time="2021-06-22T07:58:59.407974825-04:00" level=info msg="Default bridge (docker0) is assigned with an IP address 172.17.0.0/16. Daemon option --bip can be used to set a preferred IP address"
+jun 22 07:58:59 gabrielroubiera dockerd[14753]: time="2021-06-22T07:58:59.722606155-04:00" level=info msg="Loading containers: done."
+jun 22 07:58:59 gabrielroubiera dockerd[14753]: time="2021-06-22T07:58:59.787521159-04:00" level=info msg="Docker daemon" commit=b0f5bc3 graphdriver(s)=overlay2 version=20.10.7
+jun 22 07:58:59 gabrielroubiera dockerd[14753]: time="2021-06-22T07:58:59.787700642-04:00" level=info msg="Daemon has completed initialization"
+jun 22 07:58:59 gabrielroubiera systemd[1]: Started Docker Application Container Engine.
+jun 22 07:58:59 gabrielroubiera dockerd[14753]: time="2021-06-22T07:58:59.942989637-04:00" level=info msg="API listen on /run/docker.sock"
+jun 22 08:15:02 gabrielroubiera dockerd[14753]: time="2021-06-22T08:15:02.042453669-04:00" level=info msg="Attempting next endpoint for pull after error: manifest unknown: manifest unknown"
