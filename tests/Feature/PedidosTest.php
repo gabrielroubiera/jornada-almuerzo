@@ -20,4 +20,20 @@ class PedidosTest extends TestCase
         $response->assertSuccessful();
         $response->assertHeader('content-type', 'application/json');
     }
+
+    public function test_pedidos_cola()
+    {
+        $response = $this->get('api/pedidos/cola');
+
+        $response->assertSuccessful();
+        $response->assertHeader('content-type', 'application/json');
+    }
+
+    public function test_historial()
+    {
+        $response = $this->get('api/pedidos/historial');
+
+        $response->assertSuccessful();
+        $response->assertHeader('content-type', 'application/json');
+    }
 }

@@ -21,3 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('bodega', 'BodegaController');
 Route::get('historial/ingredientes/bodega', 'HistorialCompraIngredientesController');
 Route::get('pedir/plato', 'PedidosController');
+Route::get('pedidos/cola', 'PedidosController@pedidosEnCola');
+Route::get('pedidos/historial', 'PedidosController@historialPedidos');
+
