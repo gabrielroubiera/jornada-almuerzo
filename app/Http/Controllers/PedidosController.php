@@ -16,18 +16,23 @@ use \GuzzleHttp\Client as Guzzle;
 class PedidosController extends Controller
 {
     public function __invoke(){
-        $id_receta = $this->getRecetaId();
-        $id_pedido = $this->savingOrderWithStatusPreparing();
-        $ingredientesReceta = $this->repiceIngredients($id_receta);
-        $validarIngredientes = $this->validateIfThereAreAllTheIngredients($id_receta);
-        if($validarIngredientes){
-            // Proceder con la preparacion del plato
-            $mensaje = $this->preparePlate($id_pedido, $id_receta, $ingredientesReceta);
-            logger($mensaje);
-        } else {
-            // Proceder con la compra
-            logger("no hay");
-        }
+        $this->savingOrderWithStatusPreparing();
+
+        dispatch(function () {
+            $id_pedido = $this->id_pedido;
+            $id_receta = $this->getRecetaId();
+            $ingredientesReceta = $this->repiceIngredients($id_receta);
+            $validarIngredientes = $this->validateIfThereAreAllTheIngredients($id_receta);
+            if($validarIngredientes){
+                // Proceder con la preparacion del plato
+                    $this->preparePlate($id_pedido, $id_receta, $ingredientesReceta);
+                // logger($mensaje);
+            } else {
+                // Proceder con la compra
+                logger("no hay");
+            }
+        });
+
         $msg = [
             'message' => 'El plato se esta preparando.'
         ];

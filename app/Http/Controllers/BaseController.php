@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Bodega;
+use App\Events\MessageEvent;
 use App\IngredientesRecetas;
 use App\Pedidos;
 use App\Recetas;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class BaseController extends Controller
 {
+    public $id_pedido;
     public function all($table){
         return $table::where('status_id', '!=', '2')->get();
     }
@@ -27,14 +29,14 @@ class BaseController extends Controller
     // Saving an order with status preparing to start to prepare
     public function savingOrderWithStatusPreparing(){
         $pedidos = [
-            'status_pedido_id' => 2,
+            'status_pedido_id' => 1,
             'receta_id' => 0,
             'status_id' => 1,
             'created_at' => Carbon::now()
         ];
 
-        // Obtener id del dato insertado
-        return $insertPedido = DB::table('pedidos')->insertGetId($pedidos);
+        $insertPedido = DB::table('pedidos')->insertGetId($pedidos);
+        $this->id_pedido = $insertPedido;
     }
 
     // Validate if there are all the ingredients at bodega
@@ -104,7 +106,7 @@ class BaseController extends Controller
         $pedido->status_pedido_id = 3;
         $pedido->save();
 
-        return json_encode(['message' => "Order preparada con existo"]);
+        event(new MessageEvent('Order preparada con existo.'));
     }
 
 
