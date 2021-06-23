@@ -23,13 +23,14 @@ class PedidosController extends Controller
             $id_receta = $this->getRecetaId();
             $ingredientesReceta = $this->repiceIngredients($id_receta);
             $validarIngredientes = $this->validateIfThereAreAllTheIngredients($id_receta);
+
             if($validarIngredientes){
                 // Proceder con la preparacion del plato
-                    $this->preparePlate($id_pedido, $id_receta, $ingredientesReceta);
-                // logger($mensaje);
+                $this->preparePlate($id_pedido, $id_receta, $ingredientesReceta);
             } else {
                 // Proceder con la compra
-                logger("no hay");
+                $ingredientes = $this->validateIngredients($ingredientesReceta);
+                $this->buyIngredients($ingredientes);
             }
         });
 

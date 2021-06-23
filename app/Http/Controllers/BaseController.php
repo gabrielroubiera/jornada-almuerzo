@@ -109,5 +109,27 @@ class BaseController extends Controller
         event(new MessageEvent('Order preparada con existo.'));
     }
 
+    // search pending ingredients
+    public function validateIngredients($ingredientes){
+        $ingredientesPendientes = [];
 
+        for($i = 0; $i < count($ingredientes); $i++) {
+            $ingredienteEnBodega = Bodega::where('status_id', 1)
+            ->where('ingrediente', $ingredientes[$i]->ingrediente)->get();
+
+            if($ingredienteEnBodega[0]->cantidad < $ingredientes[$i]->cantidad){
+                array_push($ingredientesPendientes, $ingredienteEnBodega[0]->ingrediente);
+            };
+        }
+
+        return $ingredientesPendientes;
+    }
+
+    public function buyIngredients($ingredientes){
+        for($i = 0; $i < count($ingredientes); $i++) {
+            $url = "google.com/{$ingredientes[$i]}";
+            logger($url);
+        }
+        return true;
+    }
 }
