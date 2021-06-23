@@ -23,4 +23,5 @@ Route::get('historial/ingredientes/bodega', 'HistorialCompraIngredientesControll
 Route::get('pedir/plato', 'PedidosController');
 Route::get('pedidos/cola', 'PedidosController@pedidosEnCola');
 Route::get('pedidos/historial', 'PedidosController@historialPedidos');
+Route::get('recetas', 'RecetasController');
 

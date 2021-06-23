@@ -4,61 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Recetas;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BaseController as Controller;
 
 class RecetasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __invoke()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Recetas  $recetas
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Recetas $recetas)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Recetas  $recetas
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Recetas $recetas)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Recetas  $recetas
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Recetas $recetas)
-    {
-        //
+        $recetasAll = $this->all(Recetas::class);
+        $recetas = [];
+        for($i = 0; $i < count($recetasAll); $i++){
+            $ingredientes = $this->repiceIngredients($recetasAll[$i]->id);
+            $array = [
+                'receta' => $recetasAll[$i]->nombre,
+                'ingredientes' => $ingredientes
+            ];
+            array_push($recetas, $array);
+        }
+        return response()->json($recetas);
     }
 }
