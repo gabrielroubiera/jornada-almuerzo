@@ -15,7 +15,7 @@ class HistorialCompraIngredientesController extends Controller
      */
     public function __invoke()
     {
-        return $this->all(HistorialCompraIngredientes::class);
+        return HistorialCompraIngredientes::orderBy('id', 'DESC')->where('status_id', 1)->get();
     }
 
 }

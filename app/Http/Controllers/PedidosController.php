@@ -17,7 +17,6 @@ class PedidosController extends Controller
 {
     public function __invoke(){
         $this->savingOrderWithStatusPreparing();
-
         dispatch(function () {
             $id_pedido = $this->id_pedido;
             $id_receta = $this->getRecetaId();
@@ -31,14 +30,17 @@ class PedidosController extends Controller
                 // Proceder con la compra
                 $ingredientes = $this->validateIngredients($ingredientesReceta);
                 $this->buyIngredients($ingredientes);
+
+                // Verificar si los ingredientes son suficientes
+                $validarIngredientes = $this->validateIfThereAreAllTheIngredients($id_receta);
+                // Proceder con la preparacion del plato
+                if($validarIngredientes){
+                    $this->preparePlate($id_pedido, $id_receta, $ingredientesReceta);
+                }
             }
         });
 
-        $msg = [
-            'message' => 'El plato se esta preparando.'
-        ];
-
-        return response()->json($msg);
+        return response()->json(['message' => 'El plato se esta preparando.']);
     }
 
     public function pedidosEnCola(){
@@ -52,13 +54,15 @@ class PedidosController extends Controller
     }
 
     public function historialPedidos(){
-        $pedidos = Pedidos::where('status_pedido_id', 3)->where('status_id', 1)->get();
+        $pedidos = Pedidos::orderBy('id', 'DESC')->where('status_pedido_id', 3)->where('status_id', 1)->get();
         $historialReceta = [];
+
         for($i = 0; $i < count($pedidos); $i++) {
             $receta_id = $pedidos[$i]->receta_id;
             $receta = Recetas::where('id', $receta_id)->where('status_id', 1)->get();
             array_push($historialReceta, $receta[0]);
         }
+
         return response()->json($historialReceta);
     }
 }

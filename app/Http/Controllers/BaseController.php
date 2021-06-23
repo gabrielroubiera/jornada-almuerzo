@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Bodega;
 use App\Events\MessageEvent;
+use App\HistorialCompraIngredientes;
 use App\IngredientesRecetas;
 use App\Pedidos;
 use App\Recetas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client as Guzzle;
 
 class BaseController extends Controller
 {
@@ -126,10 +128,28 @@ class BaseController extends Controller
     }
 
     public function buyIngredients($ingredientes){
+        $client = new Guzzle();
         for($i = 0; $i < count($ingredientes); $i++) {
-            $url = "google.com/{$ingredientes[$i]}";
-            logger($url);
+            $url = "https://recruitment.alegra.com/api/farmers-market/buy?ingredient={$ingredientes[$i]}";
+            $response = $client->request('GET', $url);
+
+            $responseBody = json_decode($response->getBody());
+            $sold = $responseBody->quantitySold;
+            if($sold != 0){
+                $ingredient = Bodega::where('ingrediente', $ingredientes[$i])->get();
+                Bodega::where('ingrediente', $ingredientes[$i])->update(['cantidad' => $ingredient[0]->cantidad + $sold]);
+
+                $historialIngredients = [
+                    'ingrediente' => $ingredientes[$i],
+                    'cantidad' => $sold,
+                    'status_id' => 1,
+                    'created_at' => Carbon::now()
+                ];
+
+                DB::table('historial_compra_ingredientes')->insert($historialIngredients);
+            }
         }
-        return true;
+        logger("compra");
+        event(new MessageEvent('Order preparada con existo.'));
     }
 }
