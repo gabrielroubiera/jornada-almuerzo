@@ -149,7 +149,15 @@ class BaseController extends Controller
                 DB::table('historial_compra_ingredientes')->insert($historialIngredients);
             }
         }
-        logger("compra");
+
+        event(new MessageEvent('Order preparada con existo.'));
+    }
+
+    public function saveOrderWithRecipeInStatusQueue($id_pedido, $id_receta){
+        $pedido = Pedidos::find($id_pedido);
+        $pedido->receta_id = $id_receta;
+        $pedido->save();
+
         event(new MessageEvent('Order preparada con existo.'));
     }
 }
