@@ -1,13 +1,21 @@
 FROM php:7.4-fpm-alpine
 
 RUN docker-php-ext-install pdo pdo_mysql sockets
-RUN curl -sS https://getcomposer.org/installer​ | php -- \
-     --install-dir=/usr/local/bin --filename=composer
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_HOME /composer
+ENV PATH ./vendor/bin:/composer/vendor/bin:$PATH
+ENV COMPOSER_ALLOW_SUPERUSER 1
+RUN curl -s https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
 WORKDIR /app
+
+COPY composer.json composer.json
 COPY . .
-RUN composer install
-RUN composer dumpautoload
-RUN php artisan queue:restart
+
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+RUN composer dump-autoload
+RUN php artisan key:generate
+RUN chmod 0777 -R storage
+RUN chmod 0777 -R vendor
+RUN php artisan cache:clear
+RUN php artisan config:cache
