@@ -40,20 +40,36 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.php
-    command: php artisan queue:work
+    command: "php artisan queue:work"
     volumes:
         - .:/app
     depends_on:
       - redis
       - mysql
+      - websockets
+
+  schedule:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    command: "php artisan schedule:run"
+    volumes:
+        - .:/app
+    depends_on:
+      - queue
+      - redis
+      - mysql
+      - websockets
 
   websockets:
     build:
       context: .
       dockerfile: Dockerfile.php
-    command: "php artisan websockets:serve"
+    command: "php artisan websockets:serve --host=0.0.0.0"
     ports:
       - 6001:6001
+    expose:
+      - "6001"
     depends_on:
       - redis
       - mysql

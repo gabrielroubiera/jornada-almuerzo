@@ -59,7 +59,7 @@ class PedidosController extends Controller
     }
 
     public function historialPedidos(){
-        $pedidos = Pedidos::orderBy('id', 'DESC')->where('status_pedido_id', 3)->where('status_id', 1)->get();
+        $pedidos = Pedidos::orderBy('updated_at', 'DESC')->where('status_pedido_id', 3)->where('status_id', 1)->get();
         $historialReceta = [];
 
         for($i = 0; $i < count($pedidos); $i++) {
@@ -92,7 +92,7 @@ class PedidosController extends Controller
                 }
             }
 
-            sleep(20);
+            sleep(10);
         }
     }
 }
