@@ -27,8 +27,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.php
-    command: "php artisan migrate"
-    command: "php artisan db:seed"
     command: "php artisan serve --host=0.0.0.0"
     volumes:
       - /var/www/html/
