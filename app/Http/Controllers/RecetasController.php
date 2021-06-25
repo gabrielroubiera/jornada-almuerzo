@@ -12,6 +12,7 @@ class RecetasController extends Controller
     {
         $recetasAll = $this->all(Recetas::class);
         $recetas = [];
+
         for($i = 0; $i < count($recetasAll); $i++){
             $ingredientes = $this->repiceIngredients($recetasAll[$i]->id);
             $array = [
@@ -20,6 +21,7 @@ class RecetasController extends Controller
             ];
             array_push($recetas, $array);
         }
+
         return response()->json($recetas);
     }
 }
