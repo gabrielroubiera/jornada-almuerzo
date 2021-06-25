@@ -1,4 +1,4 @@
-version: '3.1'
+version: "3.8"
 services:
   mysql:
     image: mysql:latest
@@ -8,8 +8,52 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=rootpass
       - MYSQL_DATABASE=jornadaalmuerzo
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=EstDu1601
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=rootpass
     ports:
-      - "8001:3306"
+      - "33069:3306"
 
+  redis:
+    build:
+      context: .
+      dockerfile: Dockerfile.redis
+    ports:
+      - 6379:6379
+    volumes:
+      - ../RedisData/data:/data
+    command: redis-server
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    command: "php artisan serve --host=0.0.0.0"
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    depends_on:
+      - redis
+      - mysql
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    command: php artisan queue:work
+    volumes:
+        - .:/app
+    depends_on:
+      - redis
+      - mysql
+
+  websockets:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    command: "php artisan websockets:serve"
+    ports:
+      - 6001:6001
+    depends_on:
+      - redis
+      - mysql
