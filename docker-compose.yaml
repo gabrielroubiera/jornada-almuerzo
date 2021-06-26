@@ -53,6 +53,7 @@ services:
       context: .
       dockerfile: Dockerfile.php
     command: "php artisan schedule:run"
+    restart: on-failure
     volumes:
         - /var/www/html/
     depends_on:
