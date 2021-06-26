@@ -76,7 +76,6 @@ class PedidosController extends Controller
             $pedidosEnCola = Pedidos::where('status_pedido_id', 1)->where('status_id', 1)->get();
             $i = $pedidosEnCola->count();
             if($i > 0){
-                logger("intento");
                 $id_pedido = $pedidosEnCola[$i-1]->id;
                 $id_receta = $pedidosEnCola[$i-1]->receta_id;
                 $ingredientesReceta = $this->repiceIngredients($id_receta);
@@ -85,7 +84,6 @@ class PedidosController extends Controller
                 $validarIngredientes = $this->validateIfThereAreAllTheIngredients($id_receta);
 
                 if($validarIngredientes){
-                    logger("intento2");
                     // Proceder con la preparacion del plato
                     $this->preparePlate($id_pedido, $id_receta, $ingredientesReceta);
                     event(new MessageEvent('Order preparada con existo.'));
